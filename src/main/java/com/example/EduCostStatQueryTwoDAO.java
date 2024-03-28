@@ -12,10 +12,10 @@ import java.util.List;
 
 public class EduCostStatQueryTwoDAO {
 
-    private final String databaseName = "your_database_name";
+    private final String databaseName = "assignment-2";
     private final String mainCollectionName = "nces-collection";
     private final String queryCollectionName = "EduCostStatQueryTwo";
-    private final String mongoURL = "mongodb://localhost:27017";
+    private final String mongoURL = "mongodb+srv://ernestinyama-2:2aRBRLPi9AnzLZ8E@assignment-2-practice.jwf37e8.mongodb.net/?retryWrites=true&w=majority&appName=Assignment-2-practice";
 
     public List<String> query(int year, String type, String length) {
         // Check if the query result exists in the query collection
@@ -40,6 +40,12 @@ public class EduCostStatQueryTwoDAO {
         try (MongoClient mongoClient = MongoClients.create(mongoURL)) {
             // Access the database
             MongoDatabase database = mongoClient.getDatabase(databaseName);
+            
+            // Check if the collection exists, create it if it doesn't
+            if (!collectionExists(database, queryCollectionName)) {
+                // Create the collection
+                database.createCollection(queryCollectionName);
+            }
 
             // Access the query collection
             MongoCollection<Document> collection = database.getCollection(queryCollectionName);
@@ -87,6 +93,15 @@ public class EduCostStatQueryTwoDAO {
             }
             return states;
         }
+    }
+    
+    private boolean collectionExists(MongoDatabase database, String collectionName) {
+        for (String name : database.listCollectionNames()) {
+            if (name.equalsIgnoreCase(collectionName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void saveQuery(int year, String type, String length, List<String> states) {

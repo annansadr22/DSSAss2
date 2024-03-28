@@ -14,13 +14,13 @@ import java.util.Map;
 
 public class EduCostStatQueryFiveDAO {
 
-    private final String databaseName = "your_database_name";
+    private final String databaseName = "assignment-2";
     private final String mainCollectionName = "nces-collection";
     private final String queryCollectionName = "EduCostStatQueryFive";
-    private final String mongoURL = "mongodb://localhost:27017";
+    private final String mongoURL = "mongodb+srv://ernestinyama-2:2aRBRLPi9AnzLZ8E@assignment-2-practice.jwf37e8.mongodb.net/?retryWrites=true&w=majority&appName=Assignment-2-practice";
 
     @SuppressWarnings("unchecked")
-	public Map<String, Double> query(String year, String type, String length) {
+	public Map<String, Double> query(int year, String type, String length) {
         // Check if the query result exists in the query collection
         Document existingQuery = findQuery(year, type, length);
         if (existingQuery != null) {
@@ -36,7 +36,7 @@ public class EduCostStatQueryFiveDAO {
         return regionAverages;
     }
 
-    private Document findQuery(String year, String type, String length) {
+    private Document findQuery(int year, String type, String length) {
         // Create a MongoDB client
         try (MongoClient mongoClient = MongoClients.create(mongoURL)) {
             // Access the database
@@ -52,7 +52,7 @@ public class EduCostStatQueryFiveDAO {
         }
     }
 
-    private Map<String, Double> queryMainCollection(String year, String type, String length) {
+    private Map<String, Double> queryMainCollection(int year, String type, String length) {
         // Create a MongoDB client
         try (MongoClient mongoClient = MongoClients.create(mongoURL)) {
             // Access the database
@@ -66,7 +66,7 @@ public class EduCostStatQueryFiveDAO {
 
             // Match documents based on the provided parameters
             Document matchStage = new Document("$match",
-                    new Document("Year", Integer.parseInt(year))
+                    new Document("Year", year)
                             .append("Type", type)
                             .append("Length", length));
             pipeline.add(matchStage);
@@ -75,7 +75,7 @@ public class EduCostStatQueryFiveDAO {
             Document addFieldsStage = new Document("$addFields",
                     new Document("Region",
                             new Document("$switch", new Document("branches",
-                                    createStateToRegionBranches()).append("default", "Other"))));
+                                    createStateToRegionBranches()).append("default", "Others"))));
             pipeline.add(addFieldsStage);
 
             // Group documents by region and calculate average expense
@@ -96,7 +96,7 @@ public class EduCostStatQueryFiveDAO {
         }
     }
 
-    private void saveQuery(String year, String type, String length, Map<String, Double> regionAverages) {
+    private void saveQuery(int year, String type, String length, Map<String, Double> regionAverages) {
         // Create a MongoDB client
         try (MongoClient mongoClient = MongoClients.create(mongoURL)) {
             // Access the database

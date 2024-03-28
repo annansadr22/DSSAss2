@@ -12,10 +12,10 @@ import java.util.List;
 
 public class EduCostStatQueryFourDAO {
 
-    private final String databaseName = "your_database_name";
+    private final String databaseName = "assignment-2";
     private final String mainCollectionName = "nces-collection";
     private final String queryCollectionName = "EduCostStatQueryFour";
-    private final String mongoURL = "mongodb://localhost:27017";
+    private final String mongoURL = "mongodb+srv://ernestinyama-2:2aRBRLPi9AnzLZ8E@assignment-2-practice.jwf37e8.mongodb.net/?retryWrites=true&w=majority&appName=Assignment-2-practice";
 
     public List<String> query(int yearsRange, String type, String length) {
         // Get the latest year from the dataset
@@ -46,6 +46,12 @@ public class EduCostStatQueryFourDAO {
         try (MongoClient mongoClient = MongoClients.create(mongoURL)) {
             // Access the database
             MongoDatabase database = mongoClient.getDatabase(databaseName);
+            
+            // Check if the collection exists, create it if it doesn't
+            if (!collectionExists(database, queryCollectionName)) {
+                // Create the collection
+                database.createCollection(queryCollectionName);
+            }
 
             // Access the query collection
             MongoCollection<Document> collection = database.getCollection(queryCollectionName);
@@ -94,7 +100,16 @@ public class EduCostStatQueryFourDAO {
             return states;
         }
     }
-
+    
+    private boolean collectionExists(MongoDatabase database, String collectionName) {
+        for (String name : database.listCollectionNames()) {
+            if (name.equalsIgnoreCase(collectionName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private void saveQuery(int yearsRange, String type, String length, List<String> states) {
         // Create a MongoDB client
         try (MongoClient mongoClient = MongoClients.create(mongoURL)) {

@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package com.example;
+
 message QueryOneRequest {
   int32 year = 1;
   string state = 2;
@@ -9,7 +11,7 @@ message QueryOneRequest {
 }
 
 message QueryOneResponse {
-  double cost = 1;
+  int32 cost = 1;
 }
 
 service QueryOneService {
@@ -45,10 +47,9 @@ service QueryThreeService {
 }
 
 message QueryFourRequest {
-  int32 referenceYear = 1;
-  int32 yearRange = 2;
-  string type = 3;
-  string length = 4;
+  int32 yearRange = 1;
+  string type = 2;
+  string length = 3;
 }
 
 message QueryFourResponse {

@@ -32,25 +32,41 @@ public class CSVToMongoDB {
 
             MongoCollection<Document> collection = database.getCollection(userDefinedCollectionName);
 
-            BufferedReader br = new BufferedReader(new FileReader(csvFile));
-            // Read the first line (headers)
-            String[] headers = br.readLine().split(",");
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] fields = line.split(",");
-                Document doc = new Document();
-                // Use column headers as keys for document fields
-                for (int i = 0; i < fields.length; i++) {
-                    doc.append(headers[i], fields[i]);
-                }
-                collection.insertOne(doc);
-            }
+            // Import CSV data into MongoDB
+            importCSVData(collection, csvFile);
 
-            br.close();
+            // Update "Year" and "Value" fields to int
+            updateFieldsToInteger(collection);
+
             System.out.println("CSV data imported into MongoDB collection '" + userDefinedCollectionName + "' successfully!");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void importCSVData(MongoCollection<Document> collection, String csvFile) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(csvFile));
+        // Read the first line (headers)
+        String[] headers = br.readLine().split(",");
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] fields = line.split(",");
+            Document doc = new Document();
+            // Use column headers as keys for document fields
+            for (int i = 0; i < fields.length; i++) {
+                doc.append(headers[i], fields[i]);
+            }
+            collection.insertOne(doc);
+        }
+        br.close();
+    }
+
+    private static void updateFieldsToInteger(MongoCollection<Document> collection) {
+        // Update "Year" and "Value" fields to integer
+        collection.aggregate(Arrays.asList(
+            new Document("$set", new Document("Year", new Document("$toInt", "$Year"))),
+            new Document("$set", new Document("Value", new Document("$toInt", "$Value")))
+        )).toCollection();
     }
 }
