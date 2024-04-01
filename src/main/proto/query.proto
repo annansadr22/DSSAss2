@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package com.example;
+
+message QueryOneRequest {
+  int32 year = 1;
+  string state = 2;
+  string type = 3;
+  string length = 4;
+  string expense = 5;
+}
+
+message QueryOneResponse {
+  int32 cost = 1;
+}
+
+service QueryOneService {
+  rpc GetCost(QueryOneRequest) returns (QueryOneResponse);
+}
+
+message QueryTwoRequest {
+  int32 year = 1;
+  string type = 2;
+  string length = 3;
+}
+
+message QueryTwoResponse {
+  repeated string topStates = 1;
+}
+
+service QueryTwoService {
+  rpc GetTopStates(QueryTwoRequest) returns (QueryTwoResponse);
+}
+
+message QueryThreeRequest {
+  int32 year = 1;
+  string type = 2;
+  string length = 3;
+}
+
+message QueryThreeResponse {
+  repeated string topStates = 1;
+}
+
+service QueryThreeService {
+  rpc GetTopEconomicStates(QueryThreeRequest) returns (QueryThreeResponse);
+}
+
+message QueryFourRequest {
+  int32 yearRange = 1;
+  string type = 2;
+  string length = 3;
+}
+
+message QueryFourResponse {
+  repeated string topGrowthStates = 1;
+}
+
+service QueryFourService {
+  rpc GetTopGrowthStates(QueryFourRequest) returns (QueryFourResponse);
+}
+
+message QueryFiveRequest {
+  int32 year = 1;
+  string type = 2;
+  string length = 3;
+}
+
+message QueryFiveResponse {
+  map<string, double> regionAverages = 1;
+}
+
+service QueryFiveService {
+  rpc GetRegionAverages(QueryFiveRequest) returns (QueryFiveResponse);
+}
