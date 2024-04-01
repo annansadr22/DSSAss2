@@ -24,7 +24,7 @@ public class EduCostStatQueryThreeDAO {
             return existingQuery;
         }
 
-        // Query the main collection and aggregate to get the top 5 most expensive states
+        // Query the main collection and aggregate to get the top 5 most economic states
         List<String> queryResult = queryMainCollection(year, type, length);
         if (!queryResult.isEmpty()) {
             // Save the query result in the query collection

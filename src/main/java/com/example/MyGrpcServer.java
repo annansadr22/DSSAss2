@@ -18,7 +18,7 @@ public class MyGrpcServer {
 
     // Define the server address and port
     private static final String SERVER_ADDRESS = "localhost";
-    private static final int PORT = 50051;
+    private static final int PORT = 8080;
 
     public static void main(String[] args) throws Exception {
         // Create a new server instance

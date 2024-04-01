@@ -1,8 +1,0 @@
-mongodb+srv://ernestinyama-2:<password>@assignment-2-practice.jwf37e8.mongodb.net/?retryWrites=true&w=majority&appName=Assignment-2-practice
-
-Username: ernestinyama-2
-Password: 2aRBRLPi9AnzLZ8E
-
-// For protobuf
-
-protoc --java_out=C:\Users\HP\eclipse-workspace\assignment-2\src\main\java --grpc-java_out=C:\Users\HP\eclipse-workspace\assignment-2\src\main\java --proto_path=C:\Users\HP\eclipse-workspace\assignment-2\src\main\proto C:\Users\HP\eclipse-workspace\assignment-2\src\main\proto\query.proto
